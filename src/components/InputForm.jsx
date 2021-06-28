@@ -1,49 +1,40 @@
-import React, { Component } from "react";
-import { Form } from "react-bootstrap";
-import uniqid from "uniqid";
-import { connect } from "react-redux";
-import { addTodo } from "../store/actions";
+import React, { useState } from "react"
+import { Form } from "react-bootstrap"
+import uniqid from "uniqid"
+import { useDispatch } from "react-redux"
+import { addTodo } from "../store/actions"
 
-const mapDispatchToProps = (dispatch) => ({
-  addTodo: (todo) => dispatch(addTodo(todo))
-});
+export default function InputForm() {
+	const [description, setDescription] = useState("")
+	const dispatch = useDispatch()
 
-class InputForm extends Component {
-  state = {
-    description: ""
-  };
+	const handleChange = (event) => {
+		setDescription(event.target.value)
+	}
+  
+	const handleSubmit = (event) => {
+		event.preventDefault()
 
-  handleChange = (event) => {
-    this.setState({ description: event.target.value });
-  };
+		const todo = {
+			description: description,
+			id: uniqid(),
+			completed: false,
+		}
 
-  handleSubmit = (event) => {
-    event.preventDefault();
+		console.log(todo)
+		dispatch(addTodo(todo))
+		setDescription("")
+	}
 
-    const todo = {
-      description: this.state.description,
-      id: uniqid(),
-      completed: false
-    };
-
-    console.log(todo);
-    this.props.addTodo(todo);
-    this.setState({ description: "" });
-  };
-
-  render() {
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <Form.Control
-          type="text"
-          placeholder="New task..."
-          value={this.state.description}
-          onChange={this.handleChange}
-        />
-        <Form.Control type="submit" />
-      </Form>
-    );
-  }
+	return (
+		<Form onSubmit={handleSubmit}>
+			<Form.Control
+				type="text"
+				placeholder="New task..."
+				value={description}
+				onChange={handleChange}
+			/>
+			<Form.Control type="submit" />
+		</Form>
+	)
 }
-
-export default connect((s) => s, mapDispatchToProps)(InputForm);
