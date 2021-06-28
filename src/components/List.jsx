@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 
 export default function List(){
-  
+
   const list = useSelector((state) => state.list)
   const dispatch = useDispatch()
   
@@ -22,7 +22,7 @@ export default function List(){
             </li>
           ))}
         </ul>
-        <Button onClick={dispatch(reset())}>reset</Button>
+        <Button onClick={() => dispatch(reset())}>reset</Button>
       </>
     );
   }
